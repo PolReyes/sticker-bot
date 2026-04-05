@@ -1,34 +1,47 @@
 import { Context } from 'telegraf';
+import { PrismaClient } from '@prisma/client/index';
 import { ImageService } from '../services/imageService';
 
-export const startHandler = (ctx: Context) => {
-    ctx.reply('¡Hola! Envíame cualquier foto y le quitaré el fondo para convertirla en un sticker.');
+const prisma = new PrismaClient();
+
+export const startHandler = async (ctx: Context) => {
+    const userId = ctx.from?.id;
+    if (!userId) return;
+
+    // Activamos al usuario en la DB
+    await prisma.user.upsert({
+        where: { id: userId },
+        update: { isActive: true },
+        create: { id: userId, isActive: true },
+    });
+
+    await ctx.reply('✅ Bot activado. Ahora puedes enviarme una imagen para quitarle el fondo.');
 };
 
 export const photoHandler = async (ctx: Context) => {
+    const userId = ctx.from?.id;
+    if (!userId) return;
+
+    // BUSCAMOS AL USUARIO: Si no existe o isActive es false, bloqueamos
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user || !user.isActive) {
+        return ctx.reply('⚠️ El bot está inactivo. Usa /start para activarlo antes de enviar fotos.');
+    }
+
+    // Si pasó el filtro, procesamos la imagen
     try {
-        // Asegurarnos de que hay una foto
         if (!ctx.message || !('photo' in ctx.message)) return;
 
-        // Avisar al usuario que estamos trabajando en ello
-        const waitMessage = await ctx.reply('⏳ Procesando imagen... esto puede tardar unos segundos.');
-
-        // Obtener la foto de mayor resolución (es el último elemento del array)
+        const waitMsg = await ctx.reply('⏳ Procesando tu sticker...');
         const photo = ctx.message.photo[ctx.message.photo.length - 1];
-
-        // Obtener la URL de la foto en los servidores de Telegram
         const fileUrl = await ctx.telegram.getFileLink(photo.file_id);
 
-        // Procesar la imagen
-        const stickerBuffer = await ImageService.processImageToSticker(fileUrl.href);
+        const sticker = await ImageService.processImageToSticker(fileUrl.href);
+        await ctx.replyWithSticker({ source: sticker });
 
-        // Enviar el sticker generado
-        await ctx.replyWithSticker({ source: stickerBuffer });
-
-        // Borrar el mensaje de "Procesando"
-        await ctx.telegram.deleteMessage(ctx.chat!.id, waitMessage.message_id);
-
-    } catch (error) {
-        ctx.reply('❌ Hubo un error al procesar tu imagen. Inténtalo con otra diferente.');
+        await ctx.telegram.deleteMessage(ctx.chat!.id, waitMsg.message_id);
+    } catch (e) {
+        ctx.reply('❌ Error al procesar.');
     }
 };

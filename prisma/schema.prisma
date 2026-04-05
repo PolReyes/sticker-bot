@@ -1,0 +1,14 @@
+datasource db {
+  provider = "postgresql"
+  // Ya no ponemos la URL aquí
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        BigInt   @id
+  isActive  Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+}
