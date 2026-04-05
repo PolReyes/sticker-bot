@@ -57,3 +57,20 @@ export const photoHandler = async (ctx: Context) => {
         ctx.reply('❌ Error al procesar.');
     }
 };
+// Handler para detener el bot
+export const stopHandler = async (ctx: any) => {
+    const userId = BigInt(ctx.from.id);
+
+    try {
+        // Actualizamos el usuario en la base de datos
+        await prisma.user.update({
+            where: { id: userId },
+            data: { isActive: false },
+        });
+
+        await ctx.reply("Buzón de stickers desactivado. 🛑\nYa no procesaré tus imágenes. Usa /start para volver.");
+    } catch (error) {
+        console.error("Error en stopHandler:", error);
+        await ctx.reply("Hubo un error al intentar detener el bot.");
+    }
+};
