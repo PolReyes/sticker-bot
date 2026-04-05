@@ -1,7 +1,7 @@
 import axios from 'axios';
 import sharp from 'sharp';
 import FormData from 'form-data';
-import { config } from '../config/env';
+import { config } from '../config/env.js';
 
 export class ImageService {
     /**

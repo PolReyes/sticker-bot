@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import { config } from '../config/env';
+import { config } from '../config/env.js';
 import { startHandler, photoHandler } from './handlers.js';
 
 export const setupBot = () => {
