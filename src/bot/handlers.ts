@@ -1,8 +1,20 @@
 import { Context } from 'telegraf';
 import { PrismaClient } from '@prisma/client';
 import { ImageService } from '../services/imageService.js';
+import { PrismaPg } from '@prisma/adapter-pg';
+import pg from 'pg';
+const { Pool } = pg;
 
-const prisma = new PrismaClient();
+// 1. Creamos el pool de conexión usando la variable de entorno
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL
+});
+
+// 2. Creamos el adaptador para PostgreSQL
+const adapter = new PrismaPg(pool);
+
+// 3. Pasamos el adaptador al constructor (Esto es lo que falta)
+export const prisma = new PrismaClient({ adapter });
 
 export const startHandler = async (ctx: Context) => {
     const userId = ctx.from?.id;
