@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { setupBot } from '../src/bot'; // Importamos la configuración del bot
+import { setupBot } from '../src/bot/index.js'; // Importamos la configuración del bot
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';

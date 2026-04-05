@@ -1,4 +1,4 @@
-import { setupBot } from './bot';
+import { setupBot } from './bot/index.js';
 
 const start = () => {
     try {
