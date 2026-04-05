@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import { setupBot } from '../bot'; // Importas tu lógica
+import { setupBot } from '../src/bot'; // Importas tu lógica
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
 const bot = setupBot();
