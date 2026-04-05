@@ -2,7 +2,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 import { setupBot } from '../src/bot'; // Importamos la configuración del bot
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client/index';
+import { PrismaClient } from '@prisma/client';
 
 // Configuración del Cliente de Prisma (Adaptado a Prisma 7)
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });

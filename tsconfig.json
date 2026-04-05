@@ -1,9 +1,26 @@
 {
   "compilerOptions": {
-    "module": "CommonJS", // O "ESNext" si usas módulos de ES
-    "moduleResolution": "node", // CRUCIAL: para que encuentre paquetes en node_modules
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler", // Cambia esto de 'node' o 'node10' a 'Bundler'
     "esModuleInterop": true,
+    "strict": true,
     "skipLibCheck": true,
-    "strict": true
-  }
+    "outDir": "dist",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "lib": [
+      "ESNext"
+    ],
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*",
+    "api/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
