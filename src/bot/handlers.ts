@@ -1,6 +1,6 @@
 import { Context } from 'telegraf';
 import { PrismaClient } from '@prisma/client';
-import { ImageService } from '../services/imageService';
+import { ImageService } from '../services/imageService.js';
 
 const prisma = new PrismaClient();
 
