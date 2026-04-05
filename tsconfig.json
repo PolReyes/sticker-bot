@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS", // O "ESNext" si usas módulos de ES
+    "moduleResolution": "node", // CRUCIAL: para que encuentre paquetes en node_modules
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true
+  }
+}
